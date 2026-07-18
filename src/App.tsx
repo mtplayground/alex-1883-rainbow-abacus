@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { AppShell } from "./components/AppShell";
 import { AbacusFrame } from "./components/AbacusFrame";
-import type { BeadId } from "./state/counting";
+import type { BeadId, BeadSide } from "./state/counting";
 import { useCountingState } from "./state/useCountingState";
 
 export default function App() {
@@ -14,9 +14,20 @@ export default function App() {
     [moveBeadToSide],
   );
 
+  const handleBeadDragEnd = useCallback(
+    (beadId: BeadId, side: BeadSide) => {
+      moveBeadToSide(beadId, side);
+    },
+    [moveBeadToSide],
+  );
+
   return (
     <AppShell>
-      <AbacusFrame beads={beads} onBeadTap={handleBeadTap} />
+      <AbacusFrame
+        beads={beads}
+        onBeadDragEnd={handleBeadDragEnd}
+        onBeadTap={handleBeadTap}
+      />
     </AppShell>
   );
 }

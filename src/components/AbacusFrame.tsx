@@ -1,6 +1,6 @@
 import { Bead, type BeadDefinition } from "./Bead";
 import { Rod } from "./Rod";
-import type { BeadId, CountingBead } from "../state/counting";
+import type { BeadId, BeadSide, CountingBead } from "../state/counting";
 
 const RAINBOW_BEADS = [
   { id: "red", label: "Red", color: "#ff3131", light: "#ffb4a8", dark: "#b31223" },
@@ -41,10 +41,11 @@ const RAINBOW_BEADS = [
 
 type AbacusFrameProps = Readonly<{
   beads: readonly CountingBead[];
+  onBeadDragEnd: (beadId: BeadId, side: BeadSide) => void;
   onBeadTap: (beadId: BeadId) => void;
 }>;
 
-export function AbacusFrame({ beads, onBeadTap }: AbacusFrameProps) {
+export function AbacusFrame({ beads, onBeadDragEnd, onBeadTap }: AbacusFrameProps) {
   const beadStateById = new Map<BeadId, CountingBead>(
     beads.map((bead) => [bead.id, bead]),
   );
@@ -64,6 +65,7 @@ export function AbacusFrame({ beads, onBeadTap }: AbacusFrameProps) {
           <Bead
             bead={bead}
             key={bead.id}
+            onDragEnd={onBeadDragEnd}
             onTap={onBeadTap}
             position={index + 1}
             side={beadStateById.get(bead.id)?.side ?? "waiting"}
