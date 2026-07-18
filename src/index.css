@@ -272,13 +272,24 @@ body,
   transform: translateY(-50%);
 }
 
+.abacus-bead-item {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+}
+
 .abacus-bead {
   position: relative;
   --bead-side-offset: 0rem;
 
+  appearance: none;
   display: block;
   width: min(100%, var(--abacus-bead-size));
+  padding: 0;
   aspect-ratio: 1 / 1;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
   justify-self: center;
   border: 0.12rem solid rgb(86 45 35 / 0.22);
   border-radius: 42% 58% 48% 52% / 50% 46% 54% 50%;
@@ -299,11 +310,20 @@ body,
     inset 0.42rem 0.48rem 0.62rem rgb(255 255 255 / 0.4),
     inset -0.46rem -0.52rem 0.7rem rgb(71 31 38 / 0.24),
     0 0.56rem 0.84rem rgb(72 45 34 / 0.27);
+  touch-action: manipulation;
   transform: translateX(var(--bead-side-offset)) translateZ(0);
+  transition:
+    transform 180ms ease-out,
+    box-shadow 180ms ease-out;
 }
 
 .abacus-bead[data-side="counted"] {
-  --bead-side-offset: clamp(0.28rem, 0.65vmin, 0.55rem);
+  --bead-side-offset: clamp(1.35rem, 3.1vmin, 2.35rem);
+}
+
+.abacus-bead:focus-visible {
+  outline: 0.22rem solid rgb(24 91 255 / 0.78);
+  outline-offset: 0.28rem;
 }
 
 .abacus-bead::before {
