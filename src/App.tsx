@@ -1,11 +1,12 @@
 import { useCallback } from "react";
 import { AppShell } from "./components/AppShell";
 import { AbacusFrame } from "./components/AbacusFrame";
-import type { BeadId, BeadSide } from "./state/counting";
+import { MAX_COUNT, type BeadId, type BeadSide } from "./state/counting";
+import { TotalDisplay } from "./components/TotalDisplay";
 import { useCountingState } from "./state/useCountingState";
 
 export default function App() {
-  const { beads, moveBeadToSide } = useCountingState();
+  const { beads, moveBeadToSide, total } = useCountingState();
 
   const handleBeadTap = useCallback(
     (beadId: BeadId) => {
@@ -23,6 +24,7 @@ export default function App() {
 
   return (
     <AppShell>
+      <TotalDisplay maximum={MAX_COUNT} total={total} />
       <AbacusFrame
         beads={beads}
         onBeadDragEnd={handleBeadDragEnd}

@@ -88,7 +88,10 @@ body,
   width: min(100%, 70rem);
   min-height: min(34rem, 74svh);
   aspect-ratio: 4 / 3;
-  place-items: center;
+  grid-template-rows: minmax(5rem, auto) 1fr;
+  align-items: center;
+  justify-items: center;
+  row-gap: clamp(0.9rem, 2.4vmin, 1.8rem);
 }
 
 .app-shell__stage::before,
@@ -127,6 +130,43 @@ body,
   border-radius: 999rem;
   background: rgb(95 58 35 / 0.2);
   filter: blur(0.45rem);
+}
+
+.total-display {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  align-items: baseline;
+  min-width: min(100%, 17rem);
+  padding: clamp(0.65rem, 1.5vmin, 0.9rem) clamp(1rem, 2.4vmin, 1.45rem);
+  border: 0.12rem solid rgb(103 65 32 / 0.24);
+  border-radius: clamp(1rem, 2.2vmin, 1.35rem);
+  background:
+    linear-gradient(180deg, rgb(255 253 230 / 0.94), rgb(255 224 141 / 0.9)), #fff0a8;
+  box-shadow:
+    inset 0 0.28rem 0.28rem rgb(255 255 255 / 0.74),
+    inset 0 -0.22rem 0.32rem rgb(157 99 36 / 0.16),
+    0 0.62rem 1rem rgb(94 57 31 / 0.16);
+  color: #4a2b16;
+  column-gap: clamp(0.38rem, 1.2vmin, 0.7rem);
+  text-align: center;
+}
+
+.total-display__label,
+.total-display__maximum {
+  font-size: clamp(0.95rem, 1.9vmin, 1.2rem);
+  font-weight: 800;
+}
+
+.total-display__number {
+  min-width: 2ch;
+  font-size: clamp(2.35rem, 6.6vmin, 4.6rem);
+  font-weight: 900;
+  line-height: 0.9;
+  color: #0d7f68;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0.12rem 0 rgb(255 255 255 / 0.88);
 }
 
 .abacus-frame {
@@ -387,8 +427,14 @@ body,
   }
 
   .app-shell__stage {
+    grid-template-rows: minmax(4.5rem, auto) 1fr;
     min-height: min(36rem, 78svh);
     aspect-ratio: 4 / 5;
+    row-gap: clamp(0.5rem, 3vw, 1rem);
+  }
+
+  .total-display {
+    min-width: min(100%, 14rem);
   }
 
   .abacus-frame {
@@ -425,8 +471,19 @@ body,
   }
 
   .app-shell__stage {
+    grid-template-rows: minmax(3.6rem, auto) 1fr;
     min-height: calc(100svh - (var(--app-shell-gutter) * 2));
     aspect-ratio: 16 / 7;
+    row-gap: clamp(0.4rem, 2.2vh, 0.85rem);
+  }
+
+  .total-display {
+    min-width: 13rem;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .total-display__number {
+    font-size: clamp(1.85rem, 7.2vh, 3rem);
   }
 
   .abacus-frame {
