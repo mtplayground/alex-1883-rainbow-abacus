@@ -1,4 +1,10 @@
-import { useRef, useState, type CSSProperties, type PointerEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent,
+} from "react";
 import type { BeadId, BeadSide } from "../state/counting";
 
 const DRAG_START_THRESHOLD_PX = 10;
@@ -47,9 +53,20 @@ function releasePointerCapture(button: HTMLButtonElement, pointerId: number): vo
 
 export function Bead({ bead, onDragEnd, onTap, position, side, total }: BeadProps) {
   const dragStartRef = useRef<DragStart | null>(null);
+  const previousSideRef = useRef(side);
   const suppressClickRef = useRef(false);
   const [dragOffset, setDragOffset] = useState(0);
+  const [popRevision, setPopRevision] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    if (previousSideRef.current === side) {
+      return;
+    }
+
+    previousSideRef.current = side;
+    setPopRevision((currentRevision) => currentRevision + 1);
+  }, [side]);
 
   const beadStyle: BeadStyle = {
     "--bead-color": bead.color,
@@ -142,7 +159,12 @@ export function Bead({ bead, onDragEnd, onTap, position, side, total }: BeadProp
         style={beadStyle}
         type="button"
       >
-        <span className="abacus-bead" aria-hidden="true" />
+        <span
+          aria-hidden="true"
+          className="abacus-bead"
+          data-pop={popRevision > 0}
+          key={popRevision}
+        />
       </button>
     </li>
   );
