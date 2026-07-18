@@ -1,8 +1,10 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { playBeadClickSound } from "./audio/beadClickSound";
+import { playCelebrationSound } from "./audio/celebrationSound";
 import { speakRunningTotal } from "./audio/spokenNumbers";
 import { AppShell } from "./components/AppShell";
 import { AbacusFrame } from "./components/AbacusFrame";
+import { CelebrationOverlay } from "./components/CelebrationOverlay";
 import { MAX_COUNT, MIN_COUNT, type BeadId, type BeadSide } from "./state/counting";
 import { TotalDisplay } from "./components/TotalDisplay";
 import { useCountingState } from "./state/useCountingState";
@@ -13,6 +15,17 @@ function clampTotal(nextTotal: number): number {
 
 export default function App() {
   const { beads, moveBeadToSide, total } = useCountingState();
+  const [celebrationTrigger, setCelebrationTrigger] = useState(0);
+
+  const celebrateIfComplete = useCallback(
+    (nextTotal: number) => {
+      if (total < MAX_COUNT && nextTotal === MAX_COUNT) {
+        playCelebrationSound();
+        setCelebrationTrigger((currentTrigger) => currentTrigger + 1);
+      }
+    },
+    [total],
+  );
 
   const handleBeadTap = useCallback(
     (beadId: BeadId) => {
@@ -26,9 +39,10 @@ export default function App() {
 
       playBeadClickSound();
       speakRunningTotal(nextTotal);
+      celebrateIfComplete(nextTotal);
       moveBeadToSide(beadId, "counted");
     },
-    [beads, moveBeadToSide, total],
+    [beads, celebrateIfComplete, moveBeadToSide, total],
   );
 
   const handleBeadDragEnd = useCallback(
@@ -43,9 +57,10 @@ export default function App() {
 
       playBeadClickSound();
       speakRunningTotal(nextTotal);
+      celebrateIfComplete(nextTotal);
       moveBeadToSide(beadId, side);
     },
-    [beads, moveBeadToSide, total],
+    [beads, celebrateIfComplete, moveBeadToSide, total],
   );
 
   return (
@@ -56,6 +71,7 @@ export default function App() {
         onBeadDragEnd={handleBeadDragEnd}
         onBeadTap={handleBeadTap}
       />
+      <CelebrationOverlay trigger={celebrationTrigger} />
     </AppShell>
   );
 }
