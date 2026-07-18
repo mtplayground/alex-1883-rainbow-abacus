@@ -88,7 +88,7 @@ body,
   width: min(100%, 70rem);
   min-height: min(34rem, 74svh);
   aspect-ratio: 4 / 3;
-  grid-template-rows: minmax(5rem, auto) 1fr;
+  grid-template-rows: minmax(5rem, auto) 1fr minmax(4.8rem, auto);
   align-items: center;
   justify-items: center;
   row-gap: clamp(0.9rem, 2.4vmin, 1.8rem);
@@ -284,6 +284,62 @@ body,
 
 .celebration-overlay__confetti-piece[data-color="pink"] {
   background: #ff5fb7;
+}
+
+.controls-bar {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: min(100%, 24rem);
+}
+
+.controls-bar__button {
+  appearance: none;
+  min-width: min(100%, 13rem);
+  min-height: clamp(3.25rem, 7.2vmin, 4.25rem);
+  padding: clamp(0.65rem, 1.7vmin, 0.95rem) clamp(1.2rem, 3vmin, 1.8rem);
+  border: 0.12rem solid rgb(103 65 32 / 0.24);
+  border-radius: clamp(1rem, 2.2vmin, 1.35rem);
+  background:
+    linear-gradient(180deg, rgb(255 254 232 / 0.96), rgb(255 188 74 / 0.94)), #ffc45a;
+  box-shadow:
+    inset 0 0.28rem 0.3rem rgb(255 255 255 / 0.72),
+    inset 0 -0.22rem 0.34rem rgb(139 78 26 / 0.2),
+    0 0.62rem 0.88rem rgb(94 57 31 / 0.16);
+  color: #4a2b16;
+  cursor: pointer;
+  font: inherit;
+  font-size: clamp(1.05rem, 2.2vmin, 1.3rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  touch-action: manipulation;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    opacity 140ms ease;
+}
+
+.controls-bar__button:hover:not(:disabled) {
+  transform: translateY(-0.08rem);
+  box-shadow:
+    inset 0 0.28rem 0.3rem rgb(255 255 255 / 0.76),
+    inset 0 -0.22rem 0.34rem rgb(139 78 26 / 0.18),
+    0 0.8rem 1rem rgb(94 57 31 / 0.19);
+}
+
+.controls-bar__button:active:not(:disabled) {
+  transform: translateY(0.08rem) scale(0.98);
+}
+
+.controls-bar__button:disabled {
+  cursor: default;
+  opacity: 0.48;
+}
+
+.controls-bar__button:focus-visible {
+  outline: 0.22rem solid rgb(24 91 255 / 0.78);
+  outline-offset: 0.2rem;
 }
 
 .abacus-frame {
@@ -643,7 +699,7 @@ body,
   }
 
   .app-shell__stage {
-    grid-template-rows: minmax(4.5rem, auto) 1fr;
+    grid-template-rows: minmax(4.5rem, auto) 1fr minmax(4.4rem, auto);
     min-height: min(36rem, 78svh);
     aspect-ratio: 4 / 5;
     row-gap: clamp(0.5rem, 3vw, 1rem);
@@ -687,7 +743,7 @@ body,
   }
 
   .app-shell__stage {
-    grid-template-rows: minmax(3.6rem, auto) 1fr;
+    grid-template-rows: minmax(3.6rem, auto) 1fr minmax(3.4rem, auto);
     min-height: calc(100svh - (var(--app-shell-gutter) * 2));
     aspect-ratio: 16 / 7;
     row-gap: clamp(0.4rem, 2.2vh, 0.85rem);
@@ -700,6 +756,12 @@ body,
 
   .total-display__number {
     font-size: clamp(1.85rem, 7.2vh, 3rem);
+  }
+
+  .controls-bar__button {
+    min-height: 3rem;
+    padding: 0.42rem 1rem;
+    font-size: 1rem;
   }
 
   .abacus-frame {
