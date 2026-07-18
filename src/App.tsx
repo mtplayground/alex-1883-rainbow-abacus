@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { playBeadClickSound } from "./audio/beadClickSound";
 import { AppShell } from "./components/AppShell";
 import { AbacusFrame } from "./components/AbacusFrame";
 import { MAX_COUNT, type BeadId, type BeadSide } from "./state/counting";
@@ -10,16 +11,30 @@ export default function App() {
 
   const handleBeadTap = useCallback(
     (beadId: BeadId) => {
+      const bead = beads.find((currentBead) => currentBead.id === beadId);
+
+      if (bead?.side === "counted") {
+        return;
+      }
+
+      playBeadClickSound();
       moveBeadToSide(beadId, "counted");
     },
-    [moveBeadToSide],
+    [beads, moveBeadToSide],
   );
 
   const handleBeadDragEnd = useCallback(
     (beadId: BeadId, side: BeadSide) => {
+      const bead = beads.find((currentBead) => currentBead.id === beadId);
+
+      if (bead?.side === side) {
+        return;
+      }
+
+      playBeadClickSound();
       moveBeadToSide(beadId, side);
     },
-    [moveBeadToSide],
+    [beads, moveBeadToSide],
   );
 
   return (
