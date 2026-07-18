@@ -41,9 +41,10 @@ const RAINBOW_BEADS = [
 
 type AbacusFrameProps = Readonly<{
   beads: readonly CountingBead[];
+  onBeadTap: (beadId: BeadId) => void;
 }>;
 
-export function AbacusFrame({ beads }: AbacusFrameProps) {
+export function AbacusFrame({ beads, onBeadTap }: AbacusFrameProps) {
   const beadStateById = new Map<BeadId, CountingBead>(
     beads.map((bead) => [bead.id, bead]),
   );
@@ -63,6 +64,7 @@ export function AbacusFrame({ beads }: AbacusFrameProps) {
           <Bead
             bead={bead}
             key={bead.id}
+            onTap={onBeadTap}
             position={index + 1}
             side={beadStateById.get(bead.id)?.side ?? "waiting"}
             total={RAINBOW_BEADS.length}

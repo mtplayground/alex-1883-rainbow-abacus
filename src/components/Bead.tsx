@@ -17,12 +17,13 @@ type BeadStyle = CSSProperties & {
 
 type BeadProps = Readonly<{
   bead: BeadDefinition;
+  onTap: (beadId: BeadId) => void;
   position: number;
   side: BeadSide;
   total: number;
 }>;
 
-export function Bead({ bead, position, side, total }: BeadProps) {
+export function Bead({ bead, onTap, position, side, total }: BeadProps) {
   const beadStyle: BeadStyle = {
     "--bead-color": bead.color,
     "--bead-light": bead.light,
@@ -30,11 +31,18 @@ export function Bead({ bead, position, side, total }: BeadProps) {
   };
 
   return (
-    <li
-      aria-label={`${bead.label} bead ${position} of ${total}, ${side} side`}
-      className="abacus-bead"
-      data-side={side}
-      style={beadStyle}
-    />
+    <li className="abacus-bead-item">
+      <button
+        aria-label={`${bead.label} bead ${position} of ${total}, ${side} side`}
+        aria-pressed={side === "counted"}
+        className="abacus-bead"
+        data-side={side}
+        onClick={() => {
+          onTap(bead.id);
+        }}
+        style={beadStyle}
+        type="button"
+      />
+    </li>
   );
 }
