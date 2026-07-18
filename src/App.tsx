@@ -1,4 +1,5 @@
 import { useCallback, useState } from "react";
+import { getAmbienceEnabled, setAmbienceEnabled } from "./audio/ambienceSound";
 import { playBeadClickSound } from "./audio/beadClickSound";
 import { playCelebrationSound } from "./audio/celebrationSound";
 import {
@@ -24,6 +25,7 @@ export default function App() {
   const [isSpokenNumbersEnabled, setIsSpokenNumbersEnabled] = useState(
     getSpokenNumbersEnabled,
   );
+  const [isAmbienceEnabled, setIsAmbienceEnabled] = useState(getAmbienceEnabled);
 
   const celebrateIfComplete = useCallback(
     (nextTotal: number) => {
@@ -85,6 +87,11 @@ export default function App() {
     setIsSpokenNumbersEnabled(isEnabled);
   }, []);
 
+  const handleAmbienceChange = useCallback((isEnabled: boolean) => {
+    setAmbienceEnabled(isEnabled);
+    setIsAmbienceEnabled(isEnabled);
+  }, []);
+
   return (
     <AppShell>
       <TotalDisplay maximum={MAX_COUNT} total={total} />
@@ -94,8 +101,10 @@ export default function App() {
         onBeadTap={handleBeadTap}
       />
       <ControlsBar
+        isAmbienceEnabled={isAmbienceEnabled}
         isResetDisabled={total === MIN_COUNT}
         isSpokenNumbersEnabled={isSpokenNumbersEnabled}
+        onAmbienceChange={handleAmbienceChange}
         onReset={handleReset}
         onSpokenNumbersChange={handleSpokenNumbersChange}
       />
