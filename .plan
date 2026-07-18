@@ -1,0 +1,60 @@
+Architecture plan for issues #1-#23
+
+Product scope
+- Build the app described by the GitHub issues: a single-screen rainbow abacus experience for counting to 10.
+- Keep the implementation static and self-hostable unless a later deployment issue explicitly requires a server.
+
+Module structure and file organization
+- `src/main.tsx`: React entry point.
+- `src/App.tsx`: top-level single-screen composition and app providers.
+- `src/components/`: visual and interactive UI components.
+  - `AppShell.tsx`: tablet-first responsive layout baseline.
+  - `AbacusFrame.tsx`: wooden-style frame and rod.
+  - `Bead.tsx`: chunky rainbow bead rendering, interaction hit area, animation hooks.
+  - `RunningTotal.tsx`: always-visible count display.
+  - `Controls.tsx`: reset/replay, spoken-number toggle, ambience toggle.
+  - `Celebration.tsx`: reach-10 celebration layer.
+- `src/state/`: app state and pure counting logic.
+  - `counting.ts`: shared types, bead movement rules, reset/replay helpers.
+  - `useCountingState.ts`: React state wrapper around pure logic.
+- `src/hooks/`: interaction and environment hooks.
+  - `useBeadDrag.ts`: pointer-drag handling with large forgiving targets.
+  - `useReducedMotion.ts`: reduced-motion preference support.
+  - `useSound.ts`: click, spoken-number, and ambience playback controls.
+- `src/assets/`: self-hosted static assets.
+  - `audio/`: click sound, spoken numbers, ambience loops.
+  - `images/` or `textures/`: any local frame/background texture assets.
+- `src/styles/`: Tailwind entry and any small shared CSS utilities.
+- `src/test/`: test setup, helpers, and interaction fixtures.
+- `public/`: static files that must be copied unchanged by Vite.
+
+Shared types
+- `BeadId`: stable bead identifier from 0 to 9.
+- `BeadSide`: left/right or start/counted side of the rod.
+- `BeadState`: id, color, position side, animation state, and accessibility label data.
+- `CountingState`: bead collection, running total, celebration status, audio settings, and interaction status.
+- `AudioSettings`: spoken numbers enabled, ambience enabled, and playback availability.
+
+Dependencies between issues
+- #1-#4 establish the app foundation: Vite, React, TypeScript, Tailwind, lint/format conventions, static asset layout, and build output.
+- #3 depends on #1 and should define the responsive shell used by all visual work.
+- #5-#7 build the static abacus visual system and responsive scaling before interaction is added.
+- #8 creates the pure counting model that #9-#18 consume.
+- #9 and #10 add tap and drag interactions on top of the same state transitions from #8.
+- #11 reads from the counting model and must stay visible across viewport sizes.
+- #12-#15 layer feedback: bead animation, click sound, spoken total, and reach-10 celebration.
+- #16-#18 add controls that update existing counting/audio state without changing the core bead rules.
+- #19 validates pure counting logic and should be added once #8 exists.
+- #20 validates tap and drag after #9 and #10.
+- #21 reviews accessibility, hit targets, and reduced motion after the interactive UI is in place.
+- #22 covers the full count-to-10 celebration flow after the feature set is complete.
+- #23 finalizes static build and deployment readiness after tests and accessibility review pass.
+
+Key design decisions
+- Keep bead movement rules in pure TypeScript functions so unit tests can cover the logic without React rendering.
+- Use Pointer Events for tap and drag so mouse, touch, and stylus share one interaction path.
+- Use CSS transforms for bead movement and pop/glow animation to keep rendering smooth and responsive.
+- Respect `prefers-reduced-motion` by disabling nonessential animation while preserving state feedback.
+- Keep audio optional and user-controllable; spoken numbers and ambience must be toggles, while per-bead click sounds should fail silently if playback is blocked.
+- Favor fixed-format responsive constraints for the abacus frame, rod, beads, controls, and total display so layout does not shift during interaction.
+- Use local assets only for the production build; no runtime dependency on remote images, fonts, or audio.
