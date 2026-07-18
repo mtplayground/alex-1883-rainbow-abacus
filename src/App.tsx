@@ -1,7 +1,9 @@
+import { AppShell } from "./components/AppShell";
+
 export default function App() {
   return (
-    <main className="min-h-screen bg-white">
-      <div className="sr-only">Blank app ready</div>
-    </main>
+    <AppShell>
+      <div className="app-shell__abacus-slot" aria-hidden="true" />
+    </AppShell>
   );
 }

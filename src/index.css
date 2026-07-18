@@ -1,6 +1,13 @@
 @import "tailwindcss";
 
 :root {
+  --app-bg-top: #fff8e7;
+  --app-bg-mid: #eef8ff;
+  --app-bg-bottom: #eefbf0;
+  --app-scene-max-width: 72rem;
+  --app-scene-max-height: 48rem;
+  --app-shell-gutter: clamp(1rem, 4vmin, 3rem);
+
   font-family:
     Inter,
     ui-sans-serif,
@@ -25,4 +32,96 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
+  overflow: hidden;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body,
+#root {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+#root {
+  isolation: isolate;
+}
+
+.app-shell {
+  display: grid;
+  min-height: 100vh;
+  min-height: 100svh;
+  width: 100%;
+  place-items: center;
+  overflow: hidden;
+  padding: var(--app-shell-gutter);
+  background:
+    linear-gradient(
+      180deg,
+      var(--app-bg-top) 0%,
+      var(--app-bg-mid) 58%,
+      var(--app-bg-bottom) 100%
+    ),
+    #ffffff;
+  user-select: none;
+}
+
+.app-shell__scene {
+  display: grid;
+  width: min(100%, var(--app-scene-max-width));
+  height: min(
+    calc(100svh - (var(--app-shell-gutter) * 2)),
+    var(--app-scene-max-height)
+  );
+  min-height: min(38rem, calc(100svh - (var(--app-shell-gutter) * 2)));
+  place-items: center;
+}
+
+.app-shell__stage {
+  position: relative;
+  display: grid;
+  width: min(100%, 64rem);
+  min-height: min(32rem, 72svh);
+  aspect-ratio: 4 / 3;
+  place-items: center;
+}
+
+.app-shell__abacus-slot {
+  width: min(88%, 56rem);
+  height: clamp(14rem, 42vmin, 28rem);
+}
+
+@media (max-width: 640px) {
+  :root {
+    --app-shell-gutter: clamp(0.75rem, 5vw, 1.5rem);
+  }
+
+  .app-shell__scene {
+    min-height: calc(100svh - (var(--app-shell-gutter) * 2));
+  }
+
+  .app-shell__stage {
+    min-height: min(40rem, 78svh);
+    aspect-ratio: 3 / 4;
+  }
+
+  .app-shell__abacus-slot {
+    width: min(92%, 28rem);
+    height: clamp(16rem, 58vmin, 32rem);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --app-shell-gutter: clamp(0.5rem, 3vmin, 1rem);
+  }
+
+  .app-shell__stage {
+    min-height: calc(100svh - (var(--app-shell-gutter) * 2));
+    aspect-ratio: 16 / 7;
+  }
+
+  .app-shell__abacus-slot {
+    height: min(58svh, 18rem);
+  }
 }
