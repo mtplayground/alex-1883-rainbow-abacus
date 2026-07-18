@@ -17,6 +17,9 @@ export default defineConfig({
     },
   },
   plugins: [react(), tailwindcss()],
+  preview: {
+    allowedHosts: true,
+  },
   test: {
     environment: "jsdom",
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
