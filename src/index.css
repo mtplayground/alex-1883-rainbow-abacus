@@ -11,6 +11,8 @@
   --abacus-post-size: clamp(1.85rem, 4.2vmin, 3.35rem);
   --abacus-corner-radius: clamp(1.15rem, 2.8vmin, 2rem);
   --abacus-bead-size: clamp(3rem, 6.1vmin, 4.9rem);
+  --abacus-bead-target-size: clamp(3.25rem, 7vmin, 5.4rem);
+  --control-target-size: 3rem;
 
   font-family:
     Inter,
@@ -299,7 +301,7 @@ body,
 .controls-bar__button {
   appearance: none;
   min-width: min(100%, 13rem);
-  min-height: clamp(3.25rem, 7.2vmin, 4.25rem);
+  min-height: max(var(--control-target-size), clamp(3.25rem, 7.2vmin, 4.25rem));
   padding: clamp(0.65rem, 1.7vmin, 0.95rem) clamp(1.2rem, 3vmin, 1.8rem);
   border: 0.12rem solid rgb(103 65 32 / 0.24);
   border-radius: clamp(1rem, 2.2vmin, 1.35rem);
@@ -347,7 +349,7 @@ body,
 .controls-bar__toggle {
   display: inline-flex;
   align-items: center;
-  min-height: clamp(3.25rem, 7.2vmin, 4.25rem);
+  min-height: max(var(--control-target-size), clamp(3.25rem, 7.2vmin, 4.25rem));
   padding: clamp(0.55rem, 1.4vmin, 0.78rem) clamp(0.85rem, 2vmin, 1.15rem);
   border: 0.12rem solid rgb(103 65 32 / 0.22);
   border-radius: clamp(1rem, 2.2vmin, 1.35rem);
@@ -577,8 +579,14 @@ body,
 
   appearance: none;
   display: grid;
-  width: min(132%, calc(var(--abacus-bead-size) + clamp(0.8rem, 1.9vmin, 1.5rem)));
-  min-width: min(100%, 3.25rem);
+  width: min(
+    138%,
+    max(
+      min(100%, var(--abacus-bead-target-size)),
+      calc(var(--abacus-bead-size) + clamp(0.8rem, 1.9vmin, 1.5rem))
+    )
+  );
+  min-width: min(100%, var(--abacus-bead-target-size));
   padding: clamp(0.34rem, 0.8vmin, 0.62rem);
   aspect-ratio: 1 / 1;
   place-items: center;
@@ -764,6 +772,18 @@ body,
     animation-duration: 1ms;
     animation-iteration-count: 1;
   }
+
+  .abacus-bead-hit-area,
+  .controls-bar__button,
+  .controls-bar__toggle-thumb,
+  .controls-bar__toggle-track {
+    transition-duration: 1ms;
+  }
+
+  .controls-bar__button:hover:not(:disabled),
+  .controls-bar__button:active:not(:disabled) {
+    transform: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -772,6 +792,7 @@ body,
     --abacus-rail-size: clamp(1.15rem, 5.2vmin, 2rem);
     --abacus-post-size: clamp(1.35rem, 6vmin, 2.35rem);
     --abacus-bead-size: clamp(1.9rem, 8.6vw, 3.05rem);
+    --abacus-bead-target-size: clamp(2.4rem, 10vw, 3rem);
   }
 
   .app-shell__scene {
