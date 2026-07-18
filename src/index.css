@@ -293,7 +293,7 @@ body,
   flex-wrap: wrap;
   gap: clamp(0.55rem, 1.6vmin, 0.9rem);
   justify-content: center;
-  width: min(100%, 36rem);
+  width: min(100%, 48rem);
 }
 
 .controls-bar__button {

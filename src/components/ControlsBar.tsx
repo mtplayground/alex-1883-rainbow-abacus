@@ -1,13 +1,17 @@
 type ControlsBarProps = Readonly<{
+  isAmbienceEnabled: boolean;
   isResetDisabled: boolean;
   isSpokenNumbersEnabled: boolean;
+  onAmbienceChange: (isEnabled: boolean) => void;
   onReset: () => void;
   onSpokenNumbersChange: (isEnabled: boolean) => void;
 }>;
 
 export function ControlsBar({
+  isAmbienceEnabled,
   isResetDisabled,
   isSpokenNumbersEnabled,
+  onAmbienceChange,
   onReset,
   onSpokenNumbersChange,
 }: ControlsBarProps) {
@@ -35,6 +39,20 @@ export function ControlsBar({
           <span className="controls-bar__toggle-thumb" />
         </span>
         <span className="controls-bar__toggle-text">Spoken numbers</span>
+      </label>
+      <label className="controls-bar__toggle">
+        <input
+          checked={isAmbienceEnabled}
+          className="controls-bar__toggle-input"
+          onChange={(event) => {
+            onAmbienceChange(event.currentTarget.checked);
+          }}
+          type="checkbox"
+        />
+        <span className="controls-bar__toggle-track" aria-hidden="true">
+          <span className="controls-bar__toggle-thumb" />
+        </span>
+        <span className="controls-bar__toggle-text">Ambience</span>
       </label>
     </div>
   );
