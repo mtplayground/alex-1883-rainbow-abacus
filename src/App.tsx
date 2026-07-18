@@ -1,7 +1,11 @@
 import { useCallback, useState } from "react";
 import { playBeadClickSound } from "./audio/beadClickSound";
 import { playCelebrationSound } from "./audio/celebrationSound";
-import { speakRunningTotal } from "./audio/spokenNumbers";
+import {
+  getSpokenNumbersEnabled,
+  setSpokenNumbersEnabled,
+  speakRunningTotal,
+} from "./audio/spokenNumbers";
 import { AppShell } from "./components/AppShell";
 import { AbacusFrame } from "./components/AbacusFrame";
 import { CelebrationOverlay } from "./components/CelebrationOverlay";
@@ -17,6 +21,9 @@ function clampTotal(nextTotal: number): number {
 export default function App() {
   const { beads, moveBeadToSide, reset, total } = useCountingState();
   const [celebrationTrigger, setCelebrationTrigger] = useState(0);
+  const [isSpokenNumbersEnabled, setIsSpokenNumbersEnabled] = useState(
+    getSpokenNumbersEnabled,
+  );
 
   const celebrateIfComplete = useCallback(
     (nextTotal: number) => {
@@ -73,6 +80,11 @@ export default function App() {
     reset();
   }, [reset, total]);
 
+  const handleSpokenNumbersChange = useCallback((isEnabled: boolean) => {
+    setSpokenNumbersEnabled(isEnabled);
+    setIsSpokenNumbersEnabled(isEnabled);
+  }, []);
+
   return (
     <AppShell>
       <TotalDisplay maximum={MAX_COUNT} total={total} />
@@ -81,7 +93,12 @@ export default function App() {
         onBeadDragEnd={handleBeadDragEnd}
         onBeadTap={handleBeadTap}
       />
-      <ControlsBar isResetDisabled={total === MIN_COUNT} onReset={handleReset} />
+      <ControlsBar
+        isResetDisabled={total === MIN_COUNT}
+        isSpokenNumbersEnabled={isSpokenNumbersEnabled}
+        onReset={handleReset}
+        onSpokenNumbersChange={handleSpokenNumbersChange}
+      />
       <CelebrationOverlay trigger={celebrationTrigger} />
     </AppShell>
   );

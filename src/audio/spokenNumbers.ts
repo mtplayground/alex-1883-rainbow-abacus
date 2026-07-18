@@ -12,18 +12,46 @@ const SPOKEN_TOTALS = new Map<number, string>([
   [10, "ten"],
 ]);
 
+let areSpokenNumbersEnabled = true;
+
+function getSpeechSynthesis(): SpeechSynthesis | null {
+  if (
+    typeof window === "undefined" ||
+    typeof window.speechSynthesis === "undefined" ||
+    typeof SpeechSynthesisUtterance === "undefined"
+  ) {
+    return null;
+  }
+
+  return window.speechSynthesis;
+}
+
+export function getSpokenNumbersEnabled(): boolean {
+  return areSpokenNumbersEnabled;
+}
+
+export function setSpokenNumbersEnabled(isEnabled: boolean): void {
+  areSpokenNumbersEnabled = isEnabled;
+
+  if (!isEnabled) {
+    getSpeechSynthesis()?.cancel();
+  }
+}
+
 export function speakRunningTotal(total: number): void {
+  if (!areSpokenNumbersEnabled) {
+    return;
+  }
+
   const spokenTotal = SPOKEN_TOTALS.get(total);
 
   if (spokenTotal === undefined) {
     return;
   }
 
-  if (
-    typeof window === "undefined" ||
-    typeof window.speechSynthesis === "undefined" ||
-    typeof SpeechSynthesisUtterance === "undefined"
-  ) {
+  const speechSynthesis = getSpeechSynthesis();
+
+  if (!speechSynthesis) {
     return;
   }
 
@@ -34,8 +62,8 @@ export function speakRunningTotal(total: number): void {
     utterance.rate = 0.9;
     utterance.volume = 0.95;
 
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
   } catch {
     // Speech support varies by browser; counting should never depend on it.
   }
