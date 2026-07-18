@@ -1,7 +1,8 @@
 import type { CSSProperties } from "react";
+import type { BeadId, BeadSide } from "../state/counting";
 
 export type BeadDefinition = Readonly<{
-  id: string;
+  id: BeadId;
   label: string;
   color: string;
   light: string;
@@ -17,10 +18,11 @@ type BeadStyle = CSSProperties & {
 type BeadProps = Readonly<{
   bead: BeadDefinition;
   position: number;
+  side: BeadSide;
   total: number;
 }>;
 
-export function Bead({ bead, position, total }: BeadProps) {
+export function Bead({ bead, position, side, total }: BeadProps) {
   const beadStyle: BeadStyle = {
     "--bead-color": bead.color,
     "--bead-light": bead.light,
@@ -29,8 +31,9 @@ export function Bead({ bead, position, total }: BeadProps) {
 
   return (
     <li
-      aria-label={`${bead.label} bead ${position} of ${total}`}
+      aria-label={`${bead.label} bead ${position} of ${total}, ${side} side`}
       className="abacus-bead"
+      data-side={side}
       style={beadStyle}
     />
   );
